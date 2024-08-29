@@ -1,0 +1,3 @@
+Hi!...                     
+Before deploy the project, create a new directory named as "templates" and put the index.html and style.css file inside the directory so that the project gives exact output.        
+Thank you!
