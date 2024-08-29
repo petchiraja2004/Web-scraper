@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ff0404ec;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            background-color: #000000f1;
+            color: white;
+            text-align: center;
+            padding: 50px 0;
+            position: relative; /* For positioning the nav */
+        }
+
+        h1 {
+            margin: 0;
+            font-family: 'Old English Text MT', serif;
+            font-size: 5.0rem;
+            color: hsl(0, 98%, 50%);
+        }
+
+        nav {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            background-color: #000200;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a.active, nav ul li a:hover {
+            background-color: #fc0303;
+        }
+
+        main {
+            width: 90%;
+            max-width: 800px;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #fc0303;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #50ad34;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #f80e06;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .images-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .images-container img {
+            max-width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .images-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Web Scraper</h1>
+        <nav>
+            <ul>
+                <li><a href="/" class="{{ 'active' if request.endpoint == 'index' else '' }}">Home</a></li>
+                <li><a href="/text" class="{{ 'active' if request.endpoint == 'text' else '' }}">Text</a></li>
+                <li><a href="/images" class="{{ 'active' if request.endpoint == 'images' else '' }}">Images</a></li>
+                <li><a href="/videos" class="{{ 'active' if request.endpoint == 'videos' else '' }}">Videos</a></li>
+                <li><a href="/source" class="{{ 'active' if request.endpoint == 'source' else '' }}">Source</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form method="post">
+            <label for="url">Enter URL:</label>
+            <input type="text" id="url" name="url" required placeholder="https://example.com">
+            <button type="submit">Extract Content</button>
+        </form>
+
+        {% if text %}
+            <h2>Extracted Text from {{ url }}:</h2>
+            <pre>{{ text }}</pre>
+        {% elif error %}
+            <h2 class="error">Error:</h2>
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {% if images %}
+            <h2>Images from {{ url }}:</h2>
+            <div class="images-container">
+                {% for image in images %}
+                    <img src="{{ image }}" alt="Image from {{ url }}">
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if videos %}
+            <h2>Videos from {{ url }}:</h2>
+            <div class="videos-container">
+                {% for video in videos %}
+                    <video controls src="{{ video }}" style="max-width: 300px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"></video>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if source %}
+            <h2>Source Code from {{ url }}:</h2>
+            <pre>{{ source }}</pre>
+        {% endif %}
+    </main>
+</body>
+</html>
